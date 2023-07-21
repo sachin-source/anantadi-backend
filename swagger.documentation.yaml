@@ -1,0 +1,279 @@
+openapi: 3.0.3
+info:
+  title: Anantadi POV
+  description: |-
+    This project contains the basic APIs related to loading the categories, products, episodes and the respected labels, along with clips for the video the user selects.
+
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: sachinmgvt@gmail.com
+  license:
+    name: Licence not available
+    url: http://anantadi.io
+  version: 0.1.0
+externalDocs:
+  description: Find out more about Anantadi
+  url: https://www.anantadi.com/
+servers:
+  - url: http://localhost:3006/
+tags:
+  - name: filters
+    description: Filter dropdowns to load the video
+    # externalDocs:
+      # description: Find out more
+      # url: http://swagger.io
+  - name: labels
+    description: Load the labels based on the selected video
+    # externalDocs:
+    #   description: Find out more about our store
+    #   url: http://swagger.io
+  - name: clips
+    description: Load the clips based on selected video
+paths:
+  /category:
+    get:
+      tags:
+        - filters
+      summary: Get categories list
+      description: Get the list of categories for the dropdown
+      operationId: getCategories
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categories'
+  /product:
+    get:
+      tags:
+        - filters
+      summary: Get products list
+      description: Get the list of products for the dropdown
+      operationId: getProducts
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+  /episode:
+    get:
+      tags:
+        - filters
+      summary: Get episodes list
+      description: Get the list of episodes for the dropdown
+      operationId: getEpisodes
+      parameters: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Episodes'
+  /label:
+    get:
+      tags:
+        - labels
+      summary: Get labels list
+      description: Get the list of labels based on the video selected
+      operationId: getLabels
+      parameters:
+        - name: videoId
+          in: query
+          description: Unique ID of the video playing in the main screen 
+          required: true
+          schema:
+            type: string
+            default: '64a40c86f6a419a2eb3633e5'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Labels'
+  /clip:
+    get:
+      tags:
+        - clips
+      summary: Get clips list
+      description: Get all the clips of selected video based on it's unique id
+      operationId: getClips
+      parameters:
+        - name: videoId
+          in: query
+          description: Unique ID of the video playing in the main screen 
+          required: true
+          schema:
+            type: string
+            default: '64a40c86f6a419a2eb3633e5'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Clips'
+components:
+  schemas:
+    Categories:
+      type: object
+      properties:
+        err:
+          type: object
+          example: null
+        categories:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/categoriesObj'
+    Products:
+      type: object
+      properties: 
+        err:
+          type: object
+          example: null
+        products:
+          type: array
+          xml:
+            wrapped: false
+          items:
+            $ref: '#/components/schemas/productObj'
+    Episodes:
+      type: object
+      properties: 
+        err:
+          type: object
+          example: null
+        episodes:
+          type: array
+          xml:
+            wrapped: false
+          items:
+            $ref: '#/components/schemas/episodeObj'
+    Labels:
+      type: object
+      properties:
+        err:
+          type: object
+          example: null
+        labels:
+          type: array
+          items:
+            $ref : '#/components/schemas/labelObj'
+    Clips:
+      type: object
+      properties:
+        err:
+          type: object
+          example: null
+        clips:
+          type: array
+          items:
+            $ref : '#/components/schemas/clipObj'
+    categoriesObj:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Education'
+        value:
+          type: string
+          example: 'education'
+    productObj:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Byjus'
+        value:
+          type: string
+          example: 'byjus'
+        _id:
+          type: string
+          example: '64a4078c88f7e2d49917c413'
+        categoryId:
+          type: string
+          example: '64a4056d5a63a8d07e95d57d'
+    episodeObj:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'episode : 1'
+        episode:
+          type: string
+          example: '1'
+        _id:
+          type: string
+          example: '64a4078c88f7e2d49917c413'
+        productId:
+          type: string
+          example: '64a4056d5a63a8d07e95d57d'
+    labelObj:
+      type: object
+      properties:
+        category:
+          type: string
+          example: 'object'
+        label:
+          type: string
+          example: 'building'
+        videoId:
+          type: string
+          example: '64a40c86f6a419a2eb3633e5'
+        _id:
+          type: string
+          example: '64a412e576f0aee02f5d7914'
+    clipObj:
+      type: object
+      properties:
+        labelId:
+          type: string
+          example: '64a412e576f0aee02f5d7914'
+        timestamp:
+          type: string
+          example: '1,4'
+        videoId:
+          type: string
+          example: '64a40c86f6a419a2eb3633e5'
+        _id:
+          type: string
+          example: '64a412e576f0aee02f5d7914'
+  requestBodies:
+    Pet:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pet'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Pet'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
