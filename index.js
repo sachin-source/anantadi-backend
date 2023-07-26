@@ -4,8 +4,10 @@ const app = express();
 const cors = require('cors')
 const mongoose = require('mongoose');
 require('dotenv').config();
-const config = require('./config');
+const path = require('path');
+var appRoot = require("app-root-path");
 
+const config = require('./config');
 const routes = require('./routers/index.router');
 app.use(cors())
 app.use(bodyParser.json());
@@ -23,7 +25,11 @@ function connect() {
     .once('open', listen);
   return mongoose.connect(config.db, { keepAlive: true, useNewUrlParser: true, useUnifiedTopology: true });
 }
-
 app.use('/', routes);
+
+app.use(express.static(path.join(appRoot.path, '../anantadi-frontend/build')));
+app.get('*', (req, res) => {
+      res.sendFile(path.join(appRoot.path, "../anantadi-frontend/build/index.html"));
+});
 
 connect();

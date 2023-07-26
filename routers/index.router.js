@@ -16,7 +16,7 @@ router.use('/video', videoRoutes);
 router.use('/label', labelRoutes);
 router.use('/clip', clipRoutes);
 
-router.get('/*', (req, res) =>
-    res.send('OK')
-);
+// router.get('/*', (req, res) =>
+//     res.send('OK')
+// );
 module.exports = router;
